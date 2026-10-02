@@ -11,5 +11,7 @@ router.use(authenticate);
 router.post("/", participantController.registerForActivity);
 router.get("/my", participantController.getMyRegistrations);
 router.put("/:id/withdraw", participantController.withdrawRegistration);
+router.put("/:id/revoke-withdraw", participantController.revokeWithdrawRegistration);
+router.put("/:id", participantController.updateParticipant);
 
 module.exports = router;

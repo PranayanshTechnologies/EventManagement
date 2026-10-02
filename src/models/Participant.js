@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const participantSchema = new mongoose.Schema(
     {
+        participantNumber: {
+            type: Number,
+            required: [true, "Participant queue number is required"],
+            index: true
+        },
         activityId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Activity",
@@ -55,6 +60,11 @@ const participantSchema = new mongoose.Schema(
             default: "",
             trim: true
         },
+        audioVideoLink: {
+            type: String,
+            default: "",
+            trim: true
+        },
         isWithdraw: {
             type: Boolean,
             default: false,
@@ -98,7 +108,11 @@ const participantSchema = new mongoose.Schema(
     }
 );
 
-// Compound index to help query and avoid duplicate active registrations quickly
+// Compound unique index to enforce strict queue numbering per activity
+participantSchema.index({ activityId: 1, participantNumber: 1 }, { unique: true });
+
+// Compound indexes for query performance
+participantSchema.index({ activityId: 1, isWithdraw: 1, participantNumber: 1 });
 participantSchema.index({ activityId: 1, userId: 1 });
 
 participantSchema.methods.toJSON = function () {

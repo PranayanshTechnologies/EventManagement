@@ -50,7 +50,7 @@ const getActivityParticipants = async (activityId, query = {}) => {
     const participants = await Participant.find(filter)
         .populate("performedMarkedBy", "fullName phone")
         .populate("modifiedBy", "fullName phone")
-        .sort({ createdDate: -1 });
+        .sort({ isWithdraw: 1, participantNumber: 1 });
 
     return {
         activity: {

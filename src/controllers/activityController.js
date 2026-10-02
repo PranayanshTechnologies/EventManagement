@@ -1,4 +1,5 @@
 const activityService = require("../services/activityService");
+const participantService = require("../services/participantService");
 const { successResponse } = require("../utils/response");
 
 /**
@@ -30,7 +31,24 @@ const getActivityById = async (req, res, next) => {
     }
 };
 
+/**
+ * Get active participants list for an activity
+ * GET /api/activities/:id/participants
+ */
+const getActivityParticipants = async (req, res, next) => {
+    try {
+        const participants = await participantService.getPublicActivityParticipants(req.params.id, req.query);
+        return successResponse(res, "Participants retrieved successfully", {
+            count: participants.length,
+            participants
+        }, 200);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getActivities,
-    getActivityById
+    getActivityById,
+    getActivityParticipants
 };

@@ -36,8 +36,34 @@ const getMyRegistrations = async (req, res, next) => {
  */
 const withdrawRegistration = async (req, res, next) => {
     try {
-        const participant = await participantService.withdrawRegistration(req.params.id, req.user.id);
+        const participant = await participantService.withdrawRegistration(req.params.id, req.user.id, req.user.isAdmin);
         return successResponse(res, "Registration withdrawn successfully", { participant }, 200);
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * Revoke withdrawal of current user's registration
+ * PUT /api/participants/:id/revoke-withdraw
+ */
+const revokeWithdrawRegistration = async (req, res, next) => {
+    try {
+        const participant = await participantService.revokeWithdrawRegistration(req.params.id, req.user.id, req.user.isAdmin);
+        return successResponse(res, "Registration reactivated successfully", { participant }, 200);
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * Update current user's registration details
+ * PUT /api/participants/:id
+ */
+const updateParticipant = async (req, res, next) => {
+    try {
+        const participant = await participantService.updateParticipant(req.params.id, req.user.id, req.body, req.user.isAdmin);
+        return successResponse(res, "Registration updated successfully", { participant }, 200);
     } catch (error) {
         next(error);
     }
@@ -46,5 +72,7 @@ const withdrawRegistration = async (req, res, next) => {
 module.exports = {
     registerForActivity,
     getMyRegistrations,
-    withdrawRegistration
+    withdrawRegistration,
+    revokeWithdrawRegistration,
+    updateParticipant
 };

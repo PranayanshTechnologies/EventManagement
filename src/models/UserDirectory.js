@@ -14,6 +14,11 @@ const userDirectorySchema = new mongoose.Schema(
             trim: true,
             index: true
         },
+        email: {
+            type: String,
+            default: "",
+            trim: true
+        },
         society: {
             type: String,
             default: "",
